@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pediatric Dose Calculator</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --text: #2c3e50;
+            --bg: #ecf0f1;
+            --card-bg: white;
+        }
+
+        [data-theme="dark"] {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --text: #ecf0f1;
+            --bg: #2c3e50;
+            --card-bg: #34495e;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: 0.3s all;
+        }
+
+        body {
+            font-family: 'Kalpurush', Arial;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 10px;
+        }
+
+        .theme-switch, .lang-switch {
+            position: fixed;
+            top: 20px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .theme-switch {
+            right: 20px;
+            background: var(--secondary);
+            color: white;
+        }
+
+        .lang-switch {
+            left: 20px;
+            background: var(--primary);
+            color: white;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 80px auto;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .medicine-selector {
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+        }
+
+        input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button.calculate-btn {
+            background: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+            margin-top: 15px;
+        }
+
+        .result-box {
+            margin-top: 5px;
+            padding: 5px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            animation: fadeIn 0.5s ease;
+            border: 2px solid var(--primary);
+        }
+
+        .result-line {
+            margin: 15px 0;
+            padding: 0px;
+            border-bottom: 1px solid #eee;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-switch" onclick="toggleTheme()">🌓</button>
+    <button class="lang-switch" onclick="toggleLanguage()">বাংলা/English</button>
+
+    <div class="container">
+	<h3 style="color:#ff0000;"><marquee>রেজিস্টার্ড চিকিৎসকের পরামর্শ মোতাবেক ঔষধ সেবন করুন</marquee></h3>
+
+        <center><h3 data-lang="en">Pediatric Dose Calculator</h3></center>
+        <center><h3 data-lang="bn" style="display:none;">শিশুদের ডোজ ক্যালকুলেটর</h3></center>
+        
+        <select class="medicine-selector" id="medicineSelect">
+            <!-- 30 Medicines List -->
+            <option value="paracetamol">Paracetamol</option>
+            <option value="cefixime">Cefixime</option>
+            <option value="amoxicillin">Amoxicillin</option>
+            <option value="salbutamol">Salbutamol</option>
+            <option value="levosulbutamol">Levosulbutamol</option>
+            <option value="cefaclor">Cefaclor</option>
+            <option value="cetirizine">Cetirizine</option>
+            <option value="domperidone">Domperidone</option>
+            <option value="azithromycin">Azithromycin</option>
+            <option value="loratadine">Loratadine</option>
+            <option value="ibuprofen">Ibuprofen</option>
+            <option value="ambroxol">Ambroxol</option>
+            <option value="diphenhydramine">Diphenhydramine</option>
+            <option value="chlorpheniramine">Chlorpheniramine</option>
+            <option value="metronidazole">Metronidazole</option>
+            <option value="erythromycin">Erythromycin</option>
+            <option value="clarithromycin">Clarithromycin</option>
+            <option value="fexofenadine">Fexofenadine</option>
+            <option value="desloratadine">Desloratadine</option>
+            <option value="dextromethorphan">Dextromethorphan</option>
+            <option value="phenylephrine">Phenylephrine</option>
+            <option value="prednisolone">Prednisolone</option>
+            <option value="cefuroxime">Cefuroxime</option>
+            <option value="cefpodoxime">Cefpodoxime</option>
+            <option value="cefadroxil">Cefadroxil</option>
+            <option value="cephalexin">Cephalexin</option>
+            <option value="amoxicillin_clavulanic">Amoxicillin + Clavulanic Acid</option>
+            <option value="ampicillin">Ampicillin</option>
+            <option value="clindamycin">Clindamycin</option>
+            <option value="roxithromycin">Roxithromycin</option>
+        </select>
+
+        <div>
+            <label data-lang="en">Weight (kg)</label>
+            <label data-lang="bn" style="display:none;">ওজন (কেজি)</label>
+            <input type="number" id="weight" step="0.1" placeholder=" ">
+        </div>
+
+        <button class="calculate-btn" onclick="calculateDose()" 
+                data-lang="en">Calculate</button>
+        <button class="calculate-btn" onclick="calculateDose()" 
+                data-lang="bn" style="display:none;">গণনা করুন</button>
+
+        <div class="result-box" id="resultBox" style="display:none;">
+        <center><h4 data-lang="en">Recommended Dose</h4></center>
+        <center><h4 data-lang="bn" style="display:none;">প্রস্তাবিত ডোজ</h4></center>
+        <center><div id="doseResult"></div></center>
+        </div>
+    </div>
+
+<script>
+const medicineData = {
+    paracetamol: {
+        dose: 15,
+        maxDaily: 60,
+        timesPerDay: 4,
+        concentration: { mg: 120, ml: 5 },
+        en: { name: "Paracetamol", form: "Suspension" },
+        bn: { name: "প্যারাসিটামল", form: "সাসপেনশন" }
+    },
+    cefixime: {
+        dose: 8,
+        maxDaily: 16,
+        timesPerDay: 2,
+        concentration: { mg: 100, ml: 5 },
+        en: { name: "Cefixime", form: "Dry Syrup" },
+        bn: { name: "সেফিক্সিম", form: "ড্রাই সিরাপ" }
+    },
+    amoxicillin: {
+        dose: 25,
+        maxDaily: 100,
+        timesPerDay: 3,
+        concentration: { mg: 250, ml: 5 },
+        en: { name: "Amoxicillin", form: "Suspension" },
+        bn: { name: "অ্যামোক্সিসিলিন", form: "সাসপেনশন" }
+    },
+    salbutamol: {
+        dose: 0.15,
+        maxDaily: 0.6,
+        timesPerDay: 3,
+        concentration: { mg: 2, ml: 5 },
+        en: { name: "Salbutamol", form: "Syrup" },
+        bn: { name: "সালবিউটামল", form: "সিরাপ" }
+    },
+    levosulbutamol: {
+        dose: 0.04,
+        maxDaily: 0.16,
+        timesPerDay: 2,
+        concentration: { mg: 1, ml: 5 },
+        en: { name: "Levosulbutamol", form: "Syrup" },
+        bn: { name: "লেভোসালবিউটামল", form: "সিরাপ" }
+    },
+    cefaclor: {
+        dose: 10,
+        maxDaily: 40,
+        timesPerDay: 3,
+        concentration: { mg: 125, ml: 5 },
+        en: { name: "Cefaclor", form: "Suspension" },
+        bn: { name: "সেফাক্লোর", form: "সাসপেনশন" }
+    },
+    cetirizine: {
+        dose: 0.25,
+        maxDaily: 0.5,
+        timesPerDay: 1,
+        concentration: { mg: 5, ml: 5 },
+        en: { name: "Cetirizine", form: "Syrup" },
+        bn: { name: "সেটিরিজিন", form: "সিরাপ" }
+    },
+    domperidone: {
+        dose: 0.2,
+        maxDaily: 0.8,
+        timesPerDay: 3,
+        concentration: { mg: 5, ml: 5 },
+        en: { name: "Domperidone", form: "Suspension" },
+        bn: { name: "ডমপেরিডন", form: "সাসপেনশন" }
+    },
+    azithromycin: {
+        dose: 10,
+        maxDaily: 10,
+        timesPerDay: 1,
+        concentration: { mg: 200, ml: 5 },
+        en: { name: "Azithromycin", form: "Suspension" },
+        bn: { name: "অ্যাজিথ্রোমাইসিন", form: "সাসপেনশন" }
+    },
+    loratadine: {
+        dose: 0.1,
+        maxDaily: 0.1,
+        timesPerDay: 1,
+        concentration: { mg: 5, ml: 5 },
+        en: { name: "Loratadine", form: "Syrup" },
+        bn: { name: "লোরাটাডিন", form: "সিরাপ" }
+    },
+    ibuprofen: {
+        dose: 10,
+        maxDaily: 40,
+        timesPerDay: 3,
+        concentration: { mg: 100, ml: 5 },
+        en: { name: "Ibuprofen", form: "Suspension" },
+        bn: { name: "আইবুপ্রোফেন", form: "সাসপেনশন" }
+    },
+    ambroxol: {
+        dose: 1.2,
+        maxDaily: 4.8,
+        timesPerDay: 3,
+        concentration: { mg: 30, ml: 5 },
+        en: { name: "Ambroxol", form: "Syrup" },
+        bn: { name: "অ্যামব্রক্সল", form: "সিরাপ" }
+    },
+    diphenhydramine: {
+        dose: 1.25,
+        maxDaily: 5,
+        timesPerDay: 4,
+        concentration: { mg: 12.5, ml: 5 },
+        en: { name: "Diphenhydramine", form: "Syrup" },
+        bn: { name: "ডাইফেনহাইড্রামিন", form: "সিরাপ" }
+    },
+    chlorpheniramine: {
+        dose: 0.1,
+        maxDaily: 0.4,
+        timesPerDay: 3,
+        concentration: { mg: 2, ml: 5 },
+        en: { name: "Chlorpheniramine", form: "Syrup" },
+        bn: { name: "ক্লোরফেনিরামিন", form: "সিরাপ" }
+    },
+    metronidazole: {
+        dose: 7.5,
+        maxDaily: 30,
+        timesPerDay: 3,
+        concentration: { mg: 200, ml: 5 },
+        en: { name: "Metronidazole", form: "Suspension" },
+        bn: { name: "মেট্রোনিডাজোল", form: "সাসপেনশন" }
+    },
+    erythromycin: {
+        dose: 10,
+        maxDaily: 40,
+        timesPerDay: 4,
+        concentration: { mg: 125, ml: 5 },
+        en: { name: "Erythromycin", form: "Suspension" },
+        bn: { name: "এরিথ্রোমাইসিন", form: "সাসপেনশন" }
+    },
+    clarithromycin: {
+        dose: 7.5,
+        maxDaily: 30,
+        timesPerDay: 2,
+        concentration: { mg: 125, ml: 5 },
+        en: { name: "Clarithromycin", form: "Suspension" },
+        bn: { name: "ক্ল্যারিথ্রোমাইসিন", form: "সাসপেনশন" }
+    },
+    fexofenadine: {
+        dose: 0.3,
+        maxDaily: 0.6,
+        timesPerDay: 2,
+        concentration: { mg: 30, ml: 5 },
+        en: { name: "Fexofenadine", form: "Suspension" },
+        bn: { name: "ফেক্সোফেনাডিন", form: "সাসপেনশন" }
+    },
+    desloratadine: {
+        dose: 0.125,
+        maxDaily: 0.25,
+        timesPerDay: 1,
+        concentration: { mg: 2.5, ml: 5 },
+        en: { name: "Desloratadine", form: "Syrup" },
+        bn: { name: "ডেসলোরাটাডিন", form: "সিরাপ" }
+    },
+    dextromethorphan: {
+        dose: 0.25,
+        maxDaily: 1,
+        timesPerDay: 4,
+        concentration: { mg: 5, ml: 5 },
+        en: { name: "Dextromethorphan", form: "Syrup" },
+        bn: { name: "ডেক্সট্রোমেথরফ্যান", form: "সিরাপ" }
+    },
+    phenylephrine: {
+        dose: 0.1,
+        maxDaily: 0.4,
+        timesPerDay: 4,
+        concentration: { mg: 2.5, ml: 5 },
+        en: { name: "Phenylephrine", form: "Syrup" },
+        bn: { name: "ফেনাইলেফ্রিন", form: "সিরাপ" }
+    },
+    prednisolone: {
+        dose: 0.5,
+        maxDaily: 2,
+        timesPerDay: 2,
+        concentration: { mg: 5, ml: 5 },
+        en: { name: "Prednisolone", form: "Solution" },
+        bn: { name: "প্রেডনিসোলোন", form: "সলিউশন" }
+    },
+    cefuroxime: {
+        dose: 10,
+        maxDaily: 30,
+        timesPerDay: 2,
+        concentration: { mg: 125, ml: 5 },
+        en: { name: "Cefuroxime", form: "Suspension" },
+        bn: { name: "সেফুরোক্সিম", form: "সাসপেনশন" }
+    },
+    cefpodoxime: {
+        dose: 5,
+        maxDaily: 10,
+        timesPerDay: 2,
+        concentration: { mg: 50, ml: 5 },
+        en: { name: "Cefpodoxime", form: "Suspension" },
+        bn: { name: "সেফপোডক্সিম", form: "সাসপেনশন" }
+    },
+    cefadroxil: {
+        dose: 15,
+        maxDaily: 30,
+        timesPerDay: 2,
+        concentration: { mg: 250, ml: 5 },
+        en: { name: "Cefadroxil", form: "Suspension" },
+        bn: { name: "সেফাড্রোক্সিল", form: "সাসপেনশন" }
+    },
+    cephalexin: {
+        dose: 12.5,
+        maxDaily: 50,
+        timesPerDay: 4,
+        concentration: { mg: 125, ml: 5 },
+        en: { name: "Cephalexin", form: "Suspension" },
+        bn: { name: "সেফালেক্সিন", form: "সাসপেনশন" }
+    },
+    amoxicillin_clavulanic: {
+        dose: 25,
+        maxDaily: 100,
+        timesPerDay: 3,
+        concentration: { mg: 250, ml: 5 },
+        en: { name: "Amoxicillin + Clavulanic", form: "Suspension" },
+        bn: { name: "অ্যামোক্সিসিলিন + ক্লাভুলানিক", form: "সাসপেনশন" }
+    },
+    ampicillin: {
+        dose: 25,
+        maxDaily: 100,
+        timesPerDay: 4,
+        concentration: { mg: 125, ml: 5 },
+        en: { name: "Ampicillin", form: "Suspension" },
+        bn: { name: "অ্যাম্পিসিলিন", form: "সাসপেনশন" }
+    },
+    clindamycin: {
+        dose: 3,
+        maxDaily: 12,
+        timesPerDay: 4,
+        concentration: { mg: 75, ml: 5 },
+        en: { name: "Clindamycin", form: "Suspension" },
+        bn: { name: "ক্লিন্ডামাইসিন", form: "সাসপেনশন" }
+    },
+    roxithromycin: {
+        dose: 2.5,
+        maxDaily: 5,
+        timesPerDay: 2,
+        concentration: { mg: 50, ml: 5 },
+        en: { name: "Roxithromycin", form: "Suspension" },
+        bn: { name: "রক্সিথ্রোমাইসিন", form: "সাসপেনশন" }
+    },
+    // ... [সমস্ত ৩০টি মেডিসিনের ডেটা এভাবে যোগ করুন]
+};
+
+let currentLang = 'bn';
+let currentTheme = 'light';
+
+function toggleTheme() {
+    document.body.setAttribute('data-theme', currentTheme === 'light' ? 'dark' : 'light');
+    currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+}
+
+function toggleLanguage() {
+    currentLang = currentLang === 'bn' ? 'en' : 'bn';
+    document.querySelectorAll('[data-lang]').forEach(el => {
+        el.style.display = el.dataset.lang === currentLang ? 'block' : 'none';
+    });
+}
+
+function calculateDose() {
+    const weight = parseFloat(document.getElementById('weight').value);
+    const medicine = document.getElementById('medicineSelect').value;
+    const data = medicineData[medicine];
+    
+    // ক্যালকুলেশন
+    const perDoseMg = weight * data.dose;
+    const perDoseMl = (perDoseMg * data.concentration.ml) / data.concentration.mg;
+    const maxDailyMg = weight * data.maxDaily;
+    const maxDailyMl = (maxDailyMg * data.concentration.ml) / data.concentration.mg;
+    
+    // রেজাল্ট জেনারেট
+    const resultHTML = `
+        <div class="result-line">
+            ${currentLang === 'en' 
+                ? `Per Dose: ${perDoseMg.toFixed(1)} mg (${perDoseMl.toFixed(1)} ml)` 
+                : `প্রতি বেলায়: ${perDoseMg.toFixed(1)} মিগ্রা (${perDoseMl.toFixed(1)} মিলি)`}
+        </div>
+        <div class="result-line">
+            ${currentLang === 'en' 
+                ? `Frequency: ${data.timesPerDay} times/day` 
+                : `খাওয়ানোর নিয়ম: ${data.timesPerDay} বার/দিন`}
+        </div>
+        <div class="result-line">
+            ${currentLang === 'en' 
+                ? `Max Daily: ${maxDailyMg.toFixed(1)} mg (${maxDailyMl.toFixed(1)} ml)` 
+                : `সর্বোচ্চ দৈনিক: ${maxDailyMg.toFixed(1)} মিগ্রা (${maxDailyMl.toFixed(1)} মিলি)`}
+        </div>
+    `;
+    
+    document.getElementById('doseResult').innerHTML = resultHTML;
+    document.getElementById('resultBox').style.display = 'block';
+}
+</script>
+</body>
+</html>
