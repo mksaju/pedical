@@ -429,7 +429,7 @@ function toggleTheme() {
 }
 
 function toggleLanguage() {
-    currentLang = currentLang === 'bn' ? 'en' : 'bn';
+    currentLang = currentLang === 'en' ? 'bn' : 'en';
     document.querySelectorAll('[data-lang]').forEach(el => {
         el.style.display = el.dataset.lang === currentLang ? 'block' : 'none';
     });
