@@ -417,7 +417,7 @@ const medicineData = {
     // ... [সমস্ত ৩০টি মেডিসিনের ডেটা এভাবে যোগ করুন]
 };
 
-let currentLang = 'en';
+let currentLang = 'bn';
 let currentTheme = 'light';
 
 function toggleTheme() {
@@ -453,7 +453,7 @@ function calculateDose() {
         <div class="result-line">
             ${currentLang === 'en' 
                 ? `Frequency: ${data.timesPerDay} times/day` 
-                : `খাওয়ানোর নিয়ম: ${data.timesPerDay} বার/দিন`}
+                : `খাওয়ানোর নিয়ম: ${data.timesPerDay} বার/দিনে`}
         </div>
         <div class="result-line">
             ${currentLang === 'en' 
