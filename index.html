@@ -426,7 +426,7 @@ function toggleTheme() {
 }
 
 function toggleLanguage() {
-    currentLang = currentLang === 'en' ? 'bn' : 'en';
+    currentLang = currentLang === 'bn' ? 'en' : 'bn';
     document.querySelectorAll('[data-lang]').forEach(el => {
         el.style.display = el.dataset.lang === currentLang ? 'block' : 'none';
     });
