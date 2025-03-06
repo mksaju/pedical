@@ -115,7 +115,7 @@
 </head>
 <body>
     <button class="theme-switch" onclick="toggleTheme()">🌓</button>
-    <button class="lang-switch" onclick="toggleLanguage()">বাংলা/English</button>
+    <button class="lang-switch" onclick="toggleLanguage()">English/বাংলা</button>
 
     <div class="container">
 	<h4 style="color:#ff0000;"><marquee>রেজিস্টার্ড চিকিৎসকের পরামর্শ মোতাবেক ঔষধ সেবন করুন</marquee></h4>
@@ -155,19 +155,19 @@
         </select>
 
         <div>
-            <label data-lang="en">Weight (kg)</label>
-            <label data-lang="bn" style="display:none;">ওজন (কেজি)</label>
+            <label data-lang="en" style="display:none;">Weight (kg)</label>
+            <label data-lang="bn">ওজন (কেজি)</label>
             <input type="number" id="weight" step="0.1" placeholder=" ">
         </div>
 
         <button class="calculate-btn" onclick="calculateDose()" 
-                data-lang="en">Calculate</button>
+                data-lang="en" style="display:none;">Calculate</button>
         <button class="calculate-btn" onclick="calculateDose()" 
-                data-lang="bn" style="display:none;">গণনা করুন</button>
+                data-lang="bn">গণনা করুন</button>
 
         <div class="result-box" id="resultBox" style="display:none;">
-        <center><h4 data-lang="en">Recommended Dose</h4></center>
-        <center><h4 data-lang="bn" style="display:none;">প্রস্তাবিত ডোজ</h4></center>
+        <center><h4 data-lang="en" style="display:none;">Recommended Dose</h4></center>
+        <center><h4 data-lang="bn">প্রস্তাবিত ডোজ</h4></center>
         <center><div id="doseResult"></div></center>
         </div>
     </div>
